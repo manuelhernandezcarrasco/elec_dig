@@ -22,25 +22,23 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/manuelhernandezcarrasco/elec_dig:latest
-          builder: mybuilder
-          registry: ghcr.io
         env:
           DOCKER_USERNAME: manuelhernandezcarrasco
           DOCKER_PASSWORD: ${{ secrets.TOKEN }}
           
-      # - name: executing remote ssh commands using password
-      #   uses: appleboy/ssh-action@v1.0.0
-      #   env:
-      #     TOKEN: ${{ secrets.TOKEN }}
-      #   with:
-      #     host: ${{ secrets.EC2_HOST_DNS }}
-      #     username: ${{ secrets.EC2_USERNAME }}
-      #     key: ${{ secrets.EC2_SSH_KEY }}
-      #     envs: IMAGE_TAG,DATABASE_URL,BROKER_SERVER,TOKEN
-      #     script: |
-      #       for container_id in $(sudo docker ps -q); do sudo docker kill $container_id; done;
-      #       for container_id in $(sudo docker images -q); do sudo docker rmi -f $container_id; done;
-      #       sudo docker system prune --force
-      #       sudo docker login --username manuelhernandezcarrasco --password $TOKEN ghcr.io
-      #       sudo docker pull ghcr.io/manuelhernandezcarrasco/elec_dig:latest
-      #       sudo docker run -d -p 8080:8080 ghcr.io/manuelhernandezcarrasco/elec_dig:latest
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.0
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
+        with:
+          host: ${{ secrets.EC2_HOST_DNS }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          envs: IMAGE_TAG,DATABASE_URL,BROKER_SERVER,TOKEN
+          script: |
+            for container_id in $(sudo docker ps -q); do sudo docker kill $container_id; done;
+            for container_id in $(sudo docker images -q); do sudo docker rmi -f $container_id; done;
+            sudo docker system prune --force
+            sudo docker login --username manuelhernandezcarrasco --password $TOKEN ghcr.io
+            sudo docker pull ghcr.io/manuelhernandezcarrasco/elec_dig:latest
+            sudo docker run -d -p 8080:8080 ghcr.io/manuelhernandezcarrasco/elec_dig:latest
