@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    
+
       - name: Checkout code
         uses: actions/checkout@v2
           
@@ -28,9 +28,11 @@ jobs:
                 key: ${{ secrets.EC2_SSH_KEY }}
                 envs: IMAGE_TAG,DATABASE_URL,BROKER_SERVER,TOKEN
                 script: |
+                  sudo echo entered 
                   for container_id in $(sudo docker ps -q); do sudo docker kill $container_id; done;
                   for container_id in $(sudo docker images -q); do sudo docker rmi -f $container_id; done;
                   sudo docker system prune --force
+                  sudo echo past docker stuff
                   git clone https://manuelhernandezcarrasco:$TOKEN@github.com/manuelhernandezcarrasco/elec_dig.git
                   docker build -t $IMAGE_TAG --build-arg DATABASE_URL=$DATABASE_URL --build-arg BROKER_SERVER=$BROKER_SERVER 
                   docker run -d -p 8080:8080 $IMAGE_TAG
