@@ -16,13 +16,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Docker build and push
-        env:
-          TOKEN: ${{ secrets.TOKEN }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          BROKER_SERVER: ${{ secrets.BROKER_SERVER }}
         run: |
-        docker login --username manuelhernandezcarrasco --password $TOKEN ghcr.io
-        docker build . --tag ghcr.io/manuelhernandezcarrasco/elec_dig:latest --build-arg DATABASE_URL=$DATABASE_URL --build-arg BROKER_SERVER=$BROKER_SERVER
+        docker login --username manuelhernandezcarrasco --password ${{ secrets.TOKEN }} ghcr.io
+        docker build . --tag ghcr.io/manuelhernandezcarrasco/elec_dig:latest --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} --build-arg BROKER_SERVER=${{ secrets.BROKER_SERVER }}
         docker push ghcr.io/manuelhernandezcarrasco/elec_dig:latest
           
       - name: executing remote ssh commands using password
