@@ -1,0 +1,34 @@
+name: Docker Build and Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+          
+      - name: executing remote ssh commands using password
+              uses: appleboy/ssh-action@v1.0.0
+              env:
+                IMAGE_TAG: ${{ github.sha }}
+                DATABASE_URL: ${{ secrets.DATABASE_URL }}
+                BROKER_SERVER: ${{ secrets.BROKER_SERVER }}
+                TOKEN: ${{ secrets.TOKEN }}
+              with:
+                host: ${{ secrets.EC2_HOST_DNS }}
+                username: $ {{ secrets.EC2_USERNAME}}
+                key: ${{ secrets.EC2_SSH_KEY }}
+                envs: IMAGE_TAG,DATABASE_URL,BROKER_SERVER,TOKEN
+                script: |
+                  for container_id in $(sudo docker ps -q); do sudo docker kill $container_id; done;
+                  for container_id in $(sudo docker images -q); do sudo docker rmi -f $container_id; done;
+                  sudo docker system prune --force
+                  git clone https://manuelhernandezcarrasco:$TOKEN@github.com/manuelhernandezcarrasco/elec_dig.git
+                  docker build -t $IMAGE_TAG --build-arg DATABASE_URL=$DATABASE_URL --build-arg BROKER_SERVER=$BROKER_SERVER 
+                  docker run -d -p 8080:8080 $IMAGE_TAG
