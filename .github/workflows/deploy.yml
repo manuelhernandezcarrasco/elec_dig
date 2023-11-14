@@ -34,5 +34,5 @@ jobs:
             sudo docker system prune --force
             sudo echo past docker stuff
             git clone https://manuelhernandezcarrasco:$TOKEN@github.com/manuelhernandezcarrasco/elec_dig.git
-            docker build -t $IMAGE_TAG --build-arg DATABASE_URL=$DATABASE_URL --build-arg BROKER_SERVER=$BROKER_SERVER 
-            docker run -d -p 8080:8080 $IMAGE_TAG
+            sudo docker build -t $IMAGE_TAG --build-arg DATABASE_URL=$DATABASE_URL --build-arg BROKER_SERVER=$BROKER_SERVER 
+            sudo docker run -d -p 8080:8080 $IMAGE_TAG
