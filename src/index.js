@@ -9,7 +9,7 @@ app.use(express.json());
 const db = new PrismaClient();
 
 const getMessage = (channel, message) => {
-  return 'mosquitto_pub -h '+broker+' -t '+channel+' -m '+message  
+  return 'mosquitto_pub -h '+broker+' -t golf/'+channel+' -m '+message  
 }
 
 const createInitialStock = async() => {
