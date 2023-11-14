@@ -24,7 +24,7 @@ jobs:
           TOKEN: ${{ secrets.TOKEN }}
         with:
           host: ${{ secrets.EC2_HOST_DNS }}
-          username: $ {{ secrets.EC2_USERNAME}}
+          username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           envs: IMAGE_TAG,DATABASE_URL,BROKER_SERVER,TOKEN
           script: |
