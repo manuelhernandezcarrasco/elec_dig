@@ -29,6 +29,7 @@ app.post('/order', async(req, res) => {
   if(stock.stock<amount) res.status(400).send('Not enough balls')
 
   const message = getMessage('ventas', amount)
+  console.log("exec command:" + message);
   exec(message, { shell: '/bin/bash' }, (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing command: ${error}`);
@@ -61,6 +62,7 @@ app.post('/stock', async(req, res) => {
   })
 
   const message = getMessage('stock', stock.stock)
+  console.log("exec command:" + message);
   exec(message, { shell: '/bin/bash' }, (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing command: ${error}`);
