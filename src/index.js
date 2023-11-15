@@ -9,7 +9,8 @@ app.use(express.json());
 const db = new PrismaClient();
 
 const getMessage = (channel, message) => {
-  return 'mosquitto_pub -h '+broker+' -t golf/'+channel+' -m '+message  
+  const fullPathToMosquittoPub = '/usr/bin/mosquitto_pub';
+  return `${fullPathToMosquittoPub} -h ${broker} -t golf/${channel} -m ${message}`;
 }
 
 const createInitialStock = async() => {
