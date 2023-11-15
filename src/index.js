@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const { exec } = require("child_process");
 const { PrismaClient } = require('@prisma/client');
 const broker = process.env.BROKER_SERVER
@@ -6,6 +7,7 @@ require('dotenv').config();
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 const db = new PrismaClient();
 
 const getMessage = (channel, message) => {
