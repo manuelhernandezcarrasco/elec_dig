@@ -1,5 +1,8 @@
 FROM node:16
 
+RUN apt-get update && \
+    apt-get install -y mosquitto-clients
+
 WORKDIR /app
 
 COPY package*.json ./
@@ -14,7 +17,6 @@ ARG BROKER_SERVER
 ENV DATABASE_URL=${DATABASE_URL}
 ENV BROKER_SERVER=${BROKER_SERVER}
 ENV PORT="8080"
-ENV PATH="/usr/bin:$PATH" 
 
 EXPOSE 8080
 

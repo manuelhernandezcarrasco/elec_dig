@@ -9,8 +9,7 @@ app.use(express.json());
 const db = new PrismaClient();
 
 const getMessage = (channel, message) => {
-  const fullPathToMosquittoPub = '/usr/bin/mosquitto_pub';
-  return `${fullPathToMosquittoPub} -h ${broker} -t golf/${channel} -m ${message}`;
+  return `mosquitto_pub -h ${broker} -t golf/${channel} -m ${message}`;
 }
 
 const createInitialStock = async() => {
@@ -28,7 +27,6 @@ app.post('/order', async(req, res) => {
   if(stock.stock<amount) res.status(400).send('Not enough balls')
 
   const message = getMessage('ventas', amount)
-  console.log("exec command: "+message);
   exec(message, { shell: '/bin/bash' }, (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing command: ${error}`);
@@ -61,7 +59,6 @@ app.post('/stock', async(req, res) => {
   })
 
   const message = getMessage('stock', stock.stock)
-  console.log("exec command: "+message);
   exec(message, { shell: '/bin/bash' }, (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing command: ${error}`);
