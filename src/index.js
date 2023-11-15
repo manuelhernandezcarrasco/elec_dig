@@ -28,7 +28,12 @@ app.post('/order', async(req, res) => {
 
   const message = getMessage('ventas', amount)
   console.log("exec command: "+message);
-  exec(message)
+  exec(message, { shell: '/bin/bash' }, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing command: ${error}`);
+    }
+  });
+
   await db.sell.create({data: {amount: amount}})
   await db.stock.update({where:{id: stock.id},data:{stock: (stock.stock-amount)}})
 
@@ -56,7 +61,11 @@ app.post('/stock', async(req, res) => {
 
   const message = getMessage('stock', stock.stock)
   console.log("exec command: "+message);
-  exec(message)
+  exec(message, { shell: '/bin/bash' }, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing command: ${error}`);
+    }
+  });
 
   return res.status(200).send();
 });
