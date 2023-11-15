@@ -26,7 +26,9 @@ app.post('/order', async(req, res) => {
 
   if(stock.stock<amount) res.status(400).send('Not enough balls')
 
-  exec(getMessage('ventas', amount))
+  const message = getMessage('ventas', amount)
+  console.log("exec command: "+message);
+  exec(message)
   await db.sell.create({data: {amount: amount}})
   await db.stock.update({where:{id: stock.id},data:{stock: (stock.stock-amount)}})
 
@@ -52,7 +54,9 @@ app.post('/stock', async(req, res) => {
     }
   })
 
-  exec(getMessage('stock', stock.stock))
+  const message = getMessage('stock', stock.stock)
+  console.log("exec command: "+message);
+  exec(message)
 
   return res.status(200).send();
 });
